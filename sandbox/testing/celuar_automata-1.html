@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            canvas {
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body>
+        <button onclick="draw()">draw()</button><button onclick="celuar()">celuar()</button><br>
+        <canvas height="500" width="500" id="canvas"></canvas>
+        <script>
+            var C = []
+
+            function draw() {
+            for (let i = 0;i < 100;i ++) {
+                Ores[i] = []
+                for (let j = 0;j < 100;j ++) {
+                    
+	var max = 100;
+	var min = 0;
+random = Math.floor(Math.random() * (max - min + 1));
+if (random <= 5) {Ores[i][j] = 1} else {Ores[i][j] = 0}
+            }
+            }
+                for (let i = 0;i < C.length;i ++) {
+                for (let j = 0;j < C[i].length;j ++) {
+                    const canvas = document.getElementById('canvas');
+                    const ctx = canvas.getContext('2d');
+                    ctx.beginPath();
+                    ctx.rect(i * 5, j * 5, 5, 5);
+                if (C[i][j] == 1) {ctx.fillStyle = 'black'} else {ctx.fillStyle = 'gray'}
+                    ctx.fill()
+            }
+            }
+}
+
+/*
+function test() {
+    var tem_C = JSON.parse(JSON.stringify(C));
+
+                for (let i = 0;i < C.length;i ++) {
+                for (let j = 0;j < C[i].length;j ++) {
+                    C[i][j] = 0
+                }}
+                for (let i = 0;i < tem_C.length;i ++) {
+                for (let j = 0;j < tem_C[i].length;j ++) {
+                    const canvas = document.getElementById('canvas');
+                    const ctx = canvas.getContext('2d');
+                    ctx.beginPath();
+                    ctx.rect(i * 100, j * 100, 100, 100);
+                if (tem_C[i][j] == 1) {ctx.fillStyle = 'green'} else {ctx.fillStyle = 'black'}
+                    ctx.fill()
+            }
+            }
+                for (let i = 0;i < C.length;i ++) {
+                for (let j = 0;j < C[i].length;j ++) {
+                    const canvas = document.getElementById('canvas2');
+                    const ctx = canvas.getContext('2d');
+                    ctx.beginPath();
+                    ctx.rect(i * 100, j * 100, 100, 100);
+                if (C[i][j] == 1) {ctx.fillStyle = 'green'} else {ctx.fillStyle = 'black'}
+                    ctx.fill()
+            }
+            }
+}*/
+
+            function celuar() {
+                for (g = 0; g < 8; g ++) {
+                    var tem_C = JSON.parse(JSON.stringify(C));
+                    for (i = 0; i < tem_C.length; i ++) {
+                        for (j = 0; j < tem_C[i].length; j ++) {
+                            var cave = 0
+                            for (k = i - 1; k <= i + 1; k ++) {
+                                for (l = j - 1; l <= j + 1; l ++) {
+                                    if (k >= 0 && l >= 0 && k < tem_C.length && l < tem_C[k].length ) {
+                                        if (k == i && l == j) {} 
+                                            else {
+                                                if (tem_C[k][l] == 1) {cave ++}
+                                            }
+                                    }
+                                    else {cave ++}
+                                }
+                                if (cave > 4) {
+                                    C[i][j] = 1
+                                }
+                                else {C[i][j] = 0}
+                            }
+                        }
+                    }
+                }
+
+                for (let i = 0;i < C.length;i ++) {
+                for (let j = 0;j < C[i].length;j ++) {
+                    const canvas = document.getElementById('canvas');
+                    const ctx = canvas.getContext('2d');
+                    ctx.beginPath();
+                    ctx.rect(i * 5, j * 5, 5, 5);
+                if (C[i][j] == 1) {ctx.fillStyle = 'black'} else {ctx.fillStyle = 'gray'}
+                    ctx.fill()
+            }
+            }
+            }
+        </script>
+    </body>
+</html>

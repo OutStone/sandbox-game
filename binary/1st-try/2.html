@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            button {
+            display: inline-block;
+                    outline: 0;
+                    border: none;
+                    cursor: pointer;
+                    font-weight: 600;
+                    border-radius: 4px;
+                    font-size: 13px;
+                    height: 30px;
+                    background-color: #d7d7d7;
+                    color: #0e0e10;
+                    padding: 0 10px;
+                }
+        </style>
+    </head>
+    <body style="margin: 0px;">
+    
+        <button onclick="draw_add()" id="draw">draw a logic gate</button><button onclick="change_ch()" id="change_ch">chage</button><button onclick="change_type()" id="change_type">current type: AND</button>
+        <button onclick="A_change()"id="A">A : 0</button><button onclick="B_change()" id="B">B : 0</button><button onclick="draw_all()" id="update">update</button>
+        
+        <br><canvas style="border: 1px solid black;" height="900px" width="1880px" id="canvas"></canvas>
+
+        <script>
+            var copy, draw = 0, type = 0, which = -1, B = 0, A = 0,ch = 0
+
+function AND(a,b) {
+    if (a == 1 && b == 1) {return 1} else {return 0}
+}
+function XOR(a,b) {
+    if (a == 1 && b == 0 || a == 0 && b == 1) {return 1} else {return 0}
+}
+
+//-----------------------------images-----------------
+var img = 0
+const AND_img = new Image();
+  AND_img.src = 'AND.png';
+
+  AND_img.addEventListener('load', () => {img ++
+    console.log(img)
+  }, false);
+const XOR_img = new Image();
+  XOR_img.src = 'XOR.png';
+
+  XOR_img.addEventListener('load', () => {img ++
+    console.log(img)
+  }, false);
+//================================
+class gate{
+ 
+ constructor(type,a,b,x,y){
+   this.type = type;
+   this.input_a = a;
+   this.input_b = b;
+   this.output = 0;
+   this.length = gates.length
+   this.list_a = []
+   this.list_b = []
+   this.x = x
+   this.y = y
+}
+draw() {
+    if (this.type == 0) {this.output = AND(this.input_a,this.input_b)}
+    else {this.output = XOR(this.input_a,this.input_b)}
+
+    const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+ctx.clearRect(this.x, this.y, 60, 60);
+
+if (this.type == 0) {
+ctx.drawImage(AND_img, this.x, this.y)
+        ctx.beginPath();
+ctx.rect(this.x, this.y + 7, 10, 10);
+if (this.input_a == 1) {ctx.fillStyle = 'rgba(255,0,0,1)';} else {ctx.fillStyle = 'rgba(0,0,255,1)';}
+ctx.fill();
+    ctx.beginPath();
+ctx.rect(this.x, this.y + 29, 10, 10);
+if (this.input_b == 1) {ctx.fillStyle = 'rgba(255,0,0,1)';} else {ctx.fillStyle = 'rgba(0,0,255,1)';}
+ctx.fill();
+    ctx.beginPath();
+ctx.rect(this.x + 58, this.y + 18, 10, 10);
+if (this.output == 1) {ctx.fillStyle = 'rgba(255,0,0,1)';} else {ctx.fillStyle = 'rgba(0,0,255,1)';}
+ctx.fill();
+
+
+
+}
+else {ctx.drawImage(XOR_img, this.x, this.y)
+    ctx.beginPath();
+ctx.rect(this.x, this.y + 7, 10, 10);
+if (this.input_a == 1) {ctx.fillStyle = 'rgba(255,0,0,1)';} else {ctx.fillStyle = 'rgba(0,0,255,1)';}
+ctx.fill();
+    ctx.beginPath();
+ctx.rect(this.x, this.y + 29, 10, 10);
+if (this.input_b == 1) {ctx.fillStyle = 'rgba(255,0,0,1)';} else {ctx.fillStyle = 'rgba(0,0,255,1)';}
+ctx.fill();
+    ctx.beginPath();
+ctx.rect(this.x + 71, this.y + 18, 10, 10);
+if (this.output == 1) {ctx.fillStyle = 'rgba(255,0,0,1)';} else {ctx.fillStyle = 'rgba(0,0,255,1)';}
+ctx.fill();
+}}}
+
+class point{
+ constructor(fx,fy,tx,ty,col){
+this.from_x = fx
+this.from_y = fy
+this.to_x = tx
+this.to_y = ty
+this.col = col
+ }
+
+ draw() {
+    const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+    ctx.beginPath();
+    ctx.moveTo(this.from_x, this.from_y);
+    ctx.lineTo(this.to_x, this.to_y);
+
+if (gates[this.col].output == 0) {ctx.strokeStyle = 'rgba(0,0,255,1)';} else {ctx.strokeStyle = 'rgba(255,0,0,1)';}
+    ctx.stroke();
+}}
+
+var gates = []
+var points = []
+
+function draw_add() {
+    if (window.img == 2) {
+        if (window.ch == 0) {
+            if (window.draw == 0)
+                {window.draw ++; document.getElementById("draw").style.background = 'rgba(100,199,100,1)';}
+            else {window.draw --; document.getElementById("draw").style.background = '#d7d7d7';}
+}}}
+
+function change_type() {
+    if (window.type == 0) {window.type ++; echo = "XOR";}
+     else {window.type --; echo = "AND";;}
+     document.getElementById("change_type").innerHTML = "current type: " + echo;
+}
+
+function A_change() {
+    if (window.A == 0) {window.A ++;}
+     else {window.A --;}
+     document.getElementById("A").innerHTML = "A : " + window.A;
+}
+function B_change() {
+    if (window.B == 0) {window.B ++;}
+     else {window.B --;}
+     document.getElementById("B").innerHTML = "B : " + window.B;
+}
+function change_ch() {
+    if (window.draw == 0) {
+    if (window.ch == 0) {window.ch ++;document.getElementById("change_ch").style.background = 'rgba(100,199,100,1)';}
+                   else {window.ch --;document.getElementById("change_ch").style.background = '#d7d7d7';}
+}}
+ function draw_all() {
+    const canvas = document.getElementById('canvas');
+          const ctx = canvas.getContext('2d');
+
+          ctx.clearRect(0, 0, 600, 600);
+    for (let i = 0; i < gates.length; i++) {
+        if (gates[i].list_a.length > 0) {
+            gates[i].input_a = 0
+            for (c = 0; c < gates[i].list_a.length; c ++)
+                {if (gates[gates[i].list_a[c]].output == 1) {gates[i].input_a = 1; break} 
+            }}
+
+        if (gates[i].list_b.length > 0) {
+            gates[i].input_b = 0
+            for (c = 0;c < gates[i].list_b.length; c ++)
+                {if (gates[gates[i].list_b[c]].output == 1) {gates[i].input_b = 1; break} 
+            }}
+       gates[i].draw()}
+
+    for (let i = 0; i < points.length; i++) {
+        points[i].draw()
+    }
+ }
+//==============================================================================================
+function getMousePos( event) {
+    
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+        var rect = canvas.getBoundingClientRect();
+        return {
+            x: event.clientX - rect.left,
+            y: event.clientY - rect.top
+        };
+    }
+
+document.getElementById("canvas").addEventListener('click', function(evt) {
+    var mousePos = getMousePos( evt);
+    if (draw == 1) {var i = gates.length; gates[i] = new gate(type,A,B,mousePos.x,mousePos.y); draw_all();}
+
+}, false);
+
+document.getElementById("canvas").addEventListener('click', function(evt) {
+    var mousePos = getMousePos( evt);
+    if (ch == 1) {
+        for (let i = 0; i < gates.length; i++) {
+    if (isInside1(mousePos,gates[i])) {
+        if (gates[i].list_a.length == 0) {if (gates[i].input_a == 0) {gates[i].input_a ++;}
+        else {gates[i].input_a --;} draw_all();
+    }}
+    if (isInside2(mousePos,gates[i])) {
+        if (gates[i].list_b.length == 0) {if (gates[i].input_b == 0) {gates[i].input_b ++;}
+        else {gates[i].input_b --;} draw_all();
+    }}
+
+}}
+
+}, false);
+
+document.getElementById("canvas").addEventListener('click', function(evt) {
+    var mousePos = getMousePos( evt);
+    if (ch == 0) {
+        if (draw == 0) {
+    for (let i = 0; i < gates.length; i++) {
+    if (isInside1(mousePos,gates[i])) {
+        if (which > -1) {
+            if (gates[which].type == 0){points[points.length] = new point(gates[which].x + 68, gates[which].y + 23, gates[i].x, gates[i].y + 12, which);}
+            else {points[points.length] = new point(gates[which].x + 81, gates[which].y + 23, gates[i].x, gates[i].y + 12, which);}
+             gates[i].list_a[gates[i].list_a.length] = which;
+             draw_all();
+     which = -1;}
+    }
+    else if (isInside2(mousePos,gates[i])) {
+        if (which > -1) {
+            if (gates[which].type == 0){points[points.length] = new point(gates[which].x + 68, gates[which].y + 23, gates[i].x, gates[i].y + 34, which);}
+            else {points[points.length] = new point(gates[which].x + 81, gates[which].y + 23, gates[i].x, gates[i].y + 34, which);}
+             gates[i].list_b[gates[i].list_b.length] = which;
+             draw_all();
+     which = -1;}
+    }
+    else if (isInside3(mousePos,gates[i])) {
+        which = i}
+    }}}
+
+}, false);
+
+function isInside1(pos, gate){
+    return pos.x > gate.x && pos.x < gate.x + 10 && pos.y < gate.y + 17 && pos.y > gate.y + 7
+
+}
+function isInside2(pos, gate){
+    return pos.x > gate.x && pos.x < gate.x + 10 && pos.y < gate.y + 39 && pos.y > gate.y + 29
+}
+function isInside3(pos, gate){
+    if (gate.type == 0) {return pos.x > gate.x + + 58 && pos.x < gate.x + 68 && pos.y < gate.y + 28 && pos.y > gate.y + 18}
+    else {return pos.x > gate.x + 71 && pos.x < gate.x + 81 && pos.y < gate.y + 28 && pos.y > gate.y + 18}
+}
+        </script>
+    </body>
+</html>

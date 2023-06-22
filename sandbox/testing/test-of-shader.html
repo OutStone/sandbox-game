@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+        canvas {
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas height="400" width="400" id="canvas"></canvas><button onclick="test()">test()</button>
+        <script>
+
+
+            var X = [],px,py;old_px = 0;old_py = 0, last = 0
+
+            for (i = 0;i < 20;i ++) {
+                X[i] = []
+                for (j = 0;j < 20;j ++) {
+                    if (j > 8) {X[i][j] = 1} else {X[i][j] = 0}
+                }
+            }
+console.log(Math.round(-0.5))
+            px = Math.floor(Math.random() * ((X.length - 1) + 1));
+            for (i = 0; i < X[px].length; i++) {
+                if (X[px][i] > 0) {py = i - 1; break}
+            }
+            px = 2
+            py = 2
+
+X[12][4] = 1
+
+            draw()
+//----------------------------------------mine() function----------------------------------------//
+    function mine() {
+        if (last == 0) {X[px][py-1] = 0;draw()}
+        else if (last == 1) {X[px+1][py] = 0;draw()}
+        else if (last == 2) {X[px][py+1] = 0;draw()}
+        else {X[px-1][py] = 0;draw()}
+    }
+            function draw(){
+                X[px][py] = 10
+
+                    const canvas = document.getElementById('canvas');
+                    const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, 400, 400);
+            for (i = 0;i < X.length;i ++) {
+                for (j = 0;j < X[i].length;j ++) {
+
+                    if (X[i][j] == 10) {
+                        ctx.beginPath();
+                    ctx.rect(i * 20 + 5, j * 20 + 5, 10, 10);
+                    ctx.fillStyle = 'black'
+                    ctx.fill();
+                    continue
+                    }
+                    if (X[i][j] == 1) {
+                    ctx.beginPath();
+                    ctx.rect(i * 20, j * 20, 20, 20);
+                    ctx.fillStyle = 'gray'
+                    ctx.fill()
+                    }
+                }
+            }}
+            window.addEventListener('keydown', function (e) {
+      if (e.key == "d") {
+            last = 1
+        if (px + 1 < X.length) {
+            if (X[px + 1][py] == 0 ) {
+            X[px][py] = 0
+            old_px = px
+            old_py = py
+            px ++
+            draw()
+            } else {mine()}
+        }
+  }}, false);
+  window.addEventListener('keydown', function (e) {
+      if (e.key == "a") {
+            last = 3
+        if (px - 1 >= 0) {
+            if (X[px - 1][py] == 0 ) {
+            X[px][py] = 0
+            old_px = px
+            old_py = py
+            px --
+            draw()
+            } else {mine()}
+        }
+  }}, false);
+  window.addEventListener('keydown', function (e) {
+      if (e.key == "s") {
+            last = 2
+        if (py + 1 < X[px].length) {
+            if (X[px][py + 1] == 0 ) {
+            X[px][py] = 0
+            old_px = px
+            old_py = py
+            py ++
+            draw()
+        } else {mine()}
+        }
+  }}, false);
+  window.addEventListener('keydown', function (e) {
+      if (e.key == "w") {
+            last = 0
+        if (py - 1 >= 0) {
+            if (X[px][py - 1] == 0) {
+            X[px][py] = 0
+            old_px = px
+            old_py = py
+            py --
+            draw()
+            } else {mine()}
+        }
+  }}, false);
+       
+//========================================================================================
+function test() {
+  for (i = 0;i < X.length;i ++) {
+                for (j = 0;j < X[i].length;j ++) {
+
+ var draha_a = px - i
+ var draha_b = py - j
+  if (draha_a != 0) {
+    if (draha_b != 0) {
+    if (Math.abs(draha_b) > Math.abs(draha_a)) {var A = Math.abs(draha_a/draha_b); var B = 1} else {var B = Math.abs(draha_b/draha_a); var A = 1}}
+    else {var A = 1; var B = 0}
+  }
+  else {
+    if (draha_b != 0) {var A = 0; var B = 1}
+     else {continue;}
+  }
+
+if (draha_a < 0) {A = - A}
+if (draha_b < 0) {B = - B}
+
+var bigr; 
+if (Math.abs(draha_a) > Math.abs(draha_b)) {bigr = Math.abs(draha_a)} else {bigr = Math.abs(draha_b)}
+//samotny loop
+for (k = 1; k < bigr + 2; k ++) {
+
+if (Math.abs(A) > Math.abs(B)) {
+    if (Math.round(B*k) > Math.round(B*(k-1))) {
+        if (X[i + Math.round(A*k)][j + Math.round(B*(k-1))] != 0 && X[i + Math.round(A*(k-1))][j + Math.round(B*k)] != 0) {console.log("first black");black(i,j);break}}
+        console.log("1 " +"draha a - " + draha_a + " draha b - " + draha_b +  " A - " + A +  " B - " + B + " i - " + i + " j - " + j + " k - " + k)
+        
+        if (X[i + Math.round(A*k)][j + Math.round(B*k)] == 0 || X[i + Math.round(A*k)][j + Math.round(B*k)] >= 10) {
+            if (i + Math.round(A*k) == px && j + Math.round(B*k) == py) {console.log("real");real(i,j);break}
+             else {continue;}
+        } else {console.log("second black");black(i,j);break}
+    
+}
+
+
+if (Math.abs(A) < Math.abs(B)) {
+    if (Math.round(A*k) > Math.round(A*(k-1))) {
+        if (X[i + Math.round(A*k)][j + Math.round(B*(k-1))] != 0 && X[i + Math.round(A*(k-1))][j + Math.round(B*k)] != 0) {console.log("first black");black(i,j);break}}
+        console.log("1 " +"draha a - " + draha_a + " draha b - " + draha_b +  " A - " + A +  " B - " + B + " i - " + i + " j - " + j + " k - " + k)
+        
+        if (X[i + Math.round(A*k)][j + Math.round(B*k)] == 0 || X[i + Math.round(A*k)][j + Math.round(B*k)] >= 10) {
+            if (i + Math.round(A*k) == px && j + Math.round(B*k) == py) {console.log("real");real(i,j);break}
+             else {continue;}
+        } else {console.log("second black");black(i,j);break}
+    
+}
+
+if (Math.abs(A) == Math.abs(B)) {
+    if (X[i + Math.round(A*k)][j + Math.round(B*(k-1))] == 0 || X[i + Math.round(A*(k-1))][j + Math.round(B*k)] == 0) {
+        console.log("2 " +"draha a - " + draha_a + " draha b - " + draha_b +  " A - " + A +  " B - " + B + " i - " + i + " j - " + j + " k - " + k)
+        
+        if (X[i + Math.round(A*k)][j + Math.round(B*k)] == 0 || X[i + Math.round(A*k)][j + Math.round(B*k)] >= 10) {
+            if (i + Math.round(A*k) == px && j + Math.round(B*k) == py) {console.log("real");real(i,j);break}
+             else {continue;}
+        } else {console.log("second black");black(i,j);break}
+    } else {console.log("first black");black(i,j);break}
+}
+
+}}}}
+
+function black(i,j) {
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+    ctx.beginPath();
+ctx.rect(i * 20, j * 20, 20, 20);
+ctx.fillStyle = 'rgba(0,0,0,1)';
+ctx.fill()}
+  
+function real(i,j) {
+    if (X[i][j] == 1) {
+        if (X[i][j] == 1) {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+                    ctx.beginPath();
+                    ctx.rect(i * 20, j * 20, 20, 20);
+                    ctx.fillStyle = 'gray'
+                    ctx.fill()
+                    }}
+
+}
+        </script>
+    </body>
+</html>

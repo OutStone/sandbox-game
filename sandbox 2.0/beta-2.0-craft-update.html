@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+* {
+  margin: 0;
+  padding: 0;
+}
+        </style>
+    </head>
+    <body>
+        <canvas width="620px" height="420px" id="canvas" style="border: 1px solid black;">You have trash pc. Get better pc to play this game!</canvas>
+        <script>
+            
+//global variables
+var Map = [],Cave = [],world_width = 100, world_height = 50,chosen = "not set",Inventory = [],px,py
+//------------------------------------Class block----------------------------------------//
+class Block{
+    constructor(type){
+        this.type = type
+        this.inventory = []
+    }
+}
+//------------------------------------Terrain generation------------------------------------//
+//variables
+var start = 20,non = 30,up1 = 30,up2 = 5,do1 = 30,do2 = 5
+for (let i = 0; i < world_width; i++){
+
+random = Math.floor(Math.random() * 101) - 1;
+//chance setup
+if (start < 2) {up1 = 0; up2 = 0; do1 += 25; do2 += 10; non += 0}
+if (start > 8 && start < 17) {non = 30; up1 = 30; up2 = 5; do1 = 30; do2 = 5}
+if (start > 23) {do1 = 0; do2 = 0; up1 += 25; up2 += 10; non += 0}
+
+if (random <= non) {start = start;
+    terrain();continue}
+
+if (random > non && random <=  non + up1) {start --;
+    terrain();continue}
+if (random > non + up1 && random <=  non + up1 + up2) {start -= 2;
+    terrain();continue}
+
+if (random > non + up1 + up2 && random <=  non + up1 + up2 + do1) {start ++;
+    terrain();continue}
+if (random > non + up1 + up2 + do1 && random <=  non + up1 + up2 + do1 + do2) {start += 2;
+    terrain();continue}
+            }
+function terrain() {
+    Map[Map.length] = []
+    for (let e = 0; e < 50; e++){
+                    if (e >= start) {
+                        if (e > start + 3) {t = "stone"} else if (e > start) {t = "dirt"} else {t = "grass"}
+                    } else {t = "air"}
+                    Map[Map.length - 1][e] = new Block(t)
+                }
+}
+var Map2 = JSON.parse(JSON.stringify(Map))
+//------------------------------------Cave noise grid------------------------------------//
+for (let i = 0;i < 100;i ++) {
+                Cave[i] = []
+    for (let j = 0;j < 100;j ++) {
+	    var max = 10;
+	    var min = 0;
+
+        random = Math.floor(Math.random() * (max - min + 1));
+        if (random <= 6) {Cave[i][j] = 1} else {Cave[i][j] = 0}
+    }
+}
+//------------------------------------Cave celuar automata------------------------------------//
+for (g = 0; g < 8; g ++) {
+    var tem_Cave = JSON.parse(JSON.stringify(Cave));
+    for (i = 0; i < tem_Cave.length; i ++) {
+        for (j = 0; j < tem_Cave[i].length; j ++) {
+        var caves = 0
+            for (k = i - 1; k <= i + 1; k ++) {
+                for (l = j - 1; l <= j + 1; l ++) {
+                    if (k >= 0 && l >= 0 && k < tem_Cave.length && l < tem_Cave[k].length ) {
+                        if (k == i && l == j) {} 
+                        else {
+                            if (tem_Cave[k][l] == 1) {caves ++}
+                        }
+                    }
+                    else {caves ++}
+                }
+            if (caves > 4) {
+                Cave[i][j] = 1
+            }
+            else {Cave[i][j] = 0}
+            }
+        }
+    }
+}
+//------------------------------------Implementation------------------------------------//
+for (i = 0; i < Map.length; i ++) {
+    for (j = 0; j < Map[i].length; j ++) {
+        if (Map[i][j].type == "stone") {
+            if (Cave[i][j] == 0) {
+                Map[i][j].type = "air"
+            }
+        }
+    }
+}
+//------------------------------------Trees------------------------------------//
+gen_tree()
+
+function gen_tree() {
+    l = 0
+for (i=0;i<Map.length;i++) {
+    random = Math.floor(Math.random() * 101) - 1;
+    if (random < 31 && l < 1) {
+        l = 6
+        draw_tree(i)
+    }
+    l --
+}
+}
+
+function draw_tree(i) {
+    for (j=0;j<Map[i].length;j++) {
+        if (Map[i][j+1].type != "air") {
+            Map[i][j].type = "wood";
+            if (j-1 >= 0) {Map[i][j-1].type = "wood";}
+
+            if (j-2 >= 0) {Map[i][j-2].type = "leaves";
+                if (i-1 >= 0 &&       Map[i-1][j-2].type == "air") {Map[i-1][j-2].type = "leaves";}
+                if (i-2 >= 0 &&       Map[i-2][j-2].type == "air") {Map[i-2][j-2].type = "leaves";}
+                if (i+1 < Map.length && Map[i+1][j-2].type == "air") {Map[i+1][j-2].type = "leaves";}
+                if (i+2 < Map.length && Map[i+2][j-2].type == "air") {Map[i+2][j-2].type = "leaves";}}
+            
+            if (j-3 >= 0) {Map[i][j-3].type = "leaves";
+                if (i-1 >= 0 &&       Map[i-1][j-3].type == "air") {Map[i-1][j-3].type = "leaves";}
+                if (i-2 >= 0 &&       Map[i-2][j-3].type == "air") {Map[i-2][j-3].type = "leaves";}
+                if (i+1 < Map.length && Map[i+1][j-3].type == "air") {Map[i+1][j-3].type = "leaves";}
+                if (i+2 < Map.length && Map[i+2][j-3].type == "air") {Map[i+2][j-3].type = "leaves";}}
+            
+            if (j-4 >= 0) {Map[i][j-4].type = "leaves"
+                if (i-1 >= 0 &&       Map[i-1][j-4].type == "air") {Map[i-1][j-4].type = "leaves";}
+                if (i+1 < Map.length && Map[i+1][j-4].type == "air") {Map[i+1][j-4].type = "leaves";}}
+            
+            break
+        }
+    }
+}
+
+//------------------------------------Player------------------------------------//
+px = Math.floor(Math.random() * ((Map.length - 1) + 1));
+            for (i = 0; i < Map[px].length; i++) {
+                if (Map[px][i].type != "air") {py = i - 1; break}
+            }
+
+//-------------Controls-------------//
+window.addEventListener('keydown', function (e) {
+    if (e.key == "d") {
+        if (px + 1 < Map.length) {
+            if (Map[px + 1][py].type == "air" ) {
+                Map[px][py] = new Block("air")
+            px ++
+            } else {mine(e.key)}
+        }
+    }
+    if (e.key == "a") {
+        if (px - 1 >= 0) {
+            if (Map[px - 1][py].type == "air" ) {
+                Map[px][py] = new Block("air")
+            px --
+            } else {mine(e.key)}
+        }
+    }
+    if (e.key == "s") {
+        if (py + 1 < Map[px].length) {
+            if (Map[px][py + 1].type == "air" ) {
+                Map[px][py] = new Block("air")
+            py ++
+            } else {mine(e.key)}
+        }
+    }
+    if (e.key == "w") {
+        if (py - 1 >= 0) {
+            if (Map[px][py - 1].type == "air" ) {
+                Map[px][py] = new Block("air")
+            py --
+            } else {mine(e.key)}
+        }
+    }
+draw()
+}, false);
+//---------------------------mouse build-------------------------------//
+document.getElementById("canvas").addEventListener('mousedown', function(evt) {
+    var mousePos = getMousePos(evt);
+    if (mousePos.x < 420) {
+    mousePos.x = Math.floor(mousePos.x/20)
+    mousePos.y = Math.floor(mousePos.y/20)
+
+if (px > 11 && px < 89) {mousePos.x += px - 10}
+if (py > 11 && py < 39) {mousePos.y += py - 10}
+
+if (px >= 89) {mousePos.x += 79}
+if (py >= 39) {mousePos.y += 29}
+
+    var a = px - mousePos.x
+    var b = py - mousePos.y
+
+    if (Math.abs(b) > Math.abs(a) && b > 0) {side = 0;build();return}
+    if (Math.abs(b) > Math.abs(a) && b < 0) {side = 2;build();return}
+    if (Math.abs(b) < Math.abs(a) && a < 0) {side = 1;build();return}
+    if (Math.abs(b) < Math.abs(a) && a > 0) {side = 3;build();return}}
+     else {
+        for (k=1;k < 7; k++) {
+            for (l=1;l < 5; l++) {
+                if (mousePos.x > 390 + l*(190/4) && mousePos.x < 390 + l*(190/4) + 20) {
+                    if (mousePos.y > 160 + k*(220/6) && mousePos.y < 160 + k*(220/6) + 20) {
+                        if (Inventory[(k-1)*4+l-1].type != "non") {
+                            chosen = (k-1)*4+l-1
+                            draw_inventory()
+                            break;
+                        }
+                    }
+                }
+            } 
+        }
+        for  (k=1;k < 4; k++) {
+            for (l=1;l < 4; l++) {
+                if (mousePos.x > 390 + l*(190/4) -5 && mousePos.x < 390 + l*(190/4) + 25) {
+                    if (mousePos.y > 10 + k*(45) && mousePos.y < 10 + k*(45) + 30) {
+
+                        if (evt.button == 2 && chosen != "not set") {
+                            if (Craft[k-1][l-1].type == Inventory[chosen].type || Craft[k-1][l-1].type == "empty") {
+                                if (Craft[k-1][l-1].number < 64){
+                                    Craft[k-1][l-1].type = Inventory[chosen].type;
+                                    Craft[k-1][l-1].number += 1;
+
+                                    Inventory[chosen].number += -1;
+                                    if (Inventory[chosen].number == 0) {chosen = "not set"}
+                                    draw();
+
+                                    console.log(Craft)
+                                }
+                            }
+                        }
+
+                        if (evt.button == 0 && chosen != "not set") {
+                            if (Craft[k-1][l-1].type == Inventory[chosen].type || Craft[k-1][l-1].type == "empty") {
+                                if (Craft[k-1][l-1].number < 64){
+                                    count = Inventory[chosen].number
+                                    for (i=0;i<count;i++) {
+                                        Craft[k-1][l-1].type = Inventory[chosen].type;
+                                        Craft[k-1][l-1].number += 1;
+
+                                        Inventory[chosen].number += -1;
+                                        if (Inventory[chosen].number == 0) {chosen = "not set"}
+                                        
+                                        if (Craft[k-1][l-1].number == 64){console.log("breaking");break;}
+                                    }
+                                }
+                            }
+                        }
+                        draw();
+                    }
+                }
+            }
+        }
+    } 
+}, false);
+
+function getMousePos(event) {
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+        var rect = canvas.getBoundingClientRect();
+        return {
+            x: event.clientX - rect.left,
+            y: event.clientY - rect.top
+        };
+    }
+
+window.addEventListener("contextmenu", e => e.preventDefault());
+//---------------------------Cursor changer------------------------------//
+document.getElementById("canvas").addEventListener('mousemove', function(evt) {
+
+var mousePos = getMousePos(evt);
+if (mousePos.x > 419) {
+document.getElementById("canvas").style.cursor = "default"}
+else {cursor(chosen);}
+}, false);
+
+function cursor(index) {
+    if (index != "not set") {
+        if (Inventory[index].number > 0) {document.getElementById("canvas").style.cursor = "cell";return}
+        else {document.getElementById("canvas").style.cursor = "not-allowed"}}
+    else {document.getElementById("canvas").style.cursor = "not-allowed"}
+}
+
+//---------------------------Mine function-------------------------------//
+function mine(key) {
+        if (key == "w") {inventory_add(Inventory,Map[px][py-1].type,1);
+            Map[px][py-1] = new Block("air") ;draw();}
+
+        else if (key == "d") {inventory_add(Inventory,Map[px+1][py].type,1);
+            Map[px+1][py] = new Block("air") ;draw();}
+
+        else if (key == "s") {inventory_add(Inventory,Map[px][py+1].type,1);
+            Map[px][py+1] = new Block("air") ;draw();}
+
+        else if (key == "a") {inventory_add(Inventory,Map[px-1][py].type,1);
+            Map[px-1][py] = new Block("air") ;draw();}
+    }
+    /*
+    for (i=0;i<Inventory.lenght;i++) {
+        if (Inventory[i].)
+    }
+    */
+//---------------------------Build function-------------------------------//
+function build() {
+
+if (chosen != "not set") {
+    if (Inventory[chosen].number > 0) {
+        if (side == 0) {
+            if (Map[px][py-1].type == "air"){Map[px][py-1] = new Block(Inventory[chosen].type);}}
+        else if (side == 1) {
+            if (Map[px+1][py].type == "air"){Map[px+1][py] = new Block(Inventory[chosen].type);}}
+        else if (side == 2) {
+            if (Map[px][py+1].type == "air"){Map[px][py+1] = new Block(Inventory[chosen].type);}}
+        else {
+            if (Map[px-1][py].type == "air"){Map[px-1][py] = new Block(Inventory[chosen].type);}}
+
+    Inventory[chosen].number += -1;
+    if (Inventory[chosen].number == 0) {chosen = "not set"}
+    cursor(chosen);
+    draw();
+    }
+}
+}
+
+//---------------------------Inventory-----------------------------------//
+class slot{
+    constructor(type,number){
+        this.type = type
+        this.number = number
+}}
+
+for (i = 0; i < 24; i ++) {
+    Inventory[i] = new slot("non",0)
+}
+
+function inventory_add(inv,type,number) {
+    for (e = 0; e < inv.length;e++) {
+        if (inv[e].type == type) {if (inv[e].number < 64 || number < 0) {
+            inv[e].number += number;return;}}
+        if (e == inv.length - 1) {
+            for (i = 0; i < inv.length;i++) {
+                if (inv[i].type == "non") {inv[i].number += number;inv[i].type = type;
+                    if (chosen == "not set") {chosen = i}return;}
+}}}}
+//----------------------------Crafting-----------------------------------//
+var Craft = []
+for (i=0;i<3;i++) {
+    Craft[i] = []
+    for (j=0;j<3;j++) {
+        Craft[i][j] = new slot("empty",0)
+    }
+}
+console.log(Craft)
+//-----------------------------font load---------------------------------//
+const fontFile = new FontFace(
+  "pixel",
+  "url(./dpcomic.ttf)"
+);
+document.fonts.add(fontFile);
+
+fontFile.load().then(
+  () => {
+    draw()
+  },
+  (err) => {
+    console.error(err);
+  }
+);
+//-----------------------------draw---------------------------------//
+function draw(){
+    Map[px][py].type = "player"
+    
+    if (px < 11) {move_x = 10 - px} else if (px > (Map.length - 1) - 10) {move_x = (Map.length - 1) - 10 - px} else {move_x = 0}
+    if (py < 11) {move_y = 10 - py} else if (py > (Map[0].length - 1) - 10) {move_y = (Map[0].length - 1) - 10 - py} else {move_y = 0}
+
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, 420, canvas.height);
+
+
+    for (k=0;k<2;k++) {
+        for (i = -10; i < 11; i ++){
+            for (j = -10; j < 11; j ++){
+
+                if (k == 0) {
+                    if (Map2[px + i + move_x][py + j + move_y].type != "air") {
+                        ctx.beginPath();
+                        ctx.rect((i + 10) * 20, (j + 10) * 20, 20, 20);
+                        color("background",px + i + move_x,py + j + move_y)
+                        ctx.fill()
+                    }
+
+                } else {
+                    
+                    if (Map[px + i + move_x][py + j + move_y].type != "air") {
+                        if (Map[px + i + move_x][py + j + move_y].type == "player") {
+                            ctx.beginPath();
+                            ctx.rect((i + 10) * 20 + 5, (j + 10) * 20 + 5, 10, 10);
+                            ctx.fillStyle = 'rgba(100,0,100,1)'
+                            ctx.fill();
+                        } else {
+                            ctx.beginPath();
+                            ctx.rect((i + 10) * 20, (j + 10) * 20, 20, 20);
+                            color("foreground",px + i + move_x,py + j + move_y)
+                            ctx.fill()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    draw_inventory()
+    cursor(chosen)
+}
+
+
+function color(which,x,y) {
+    const canvas = document.getElementById('canvas');
+                    const ctx = canvas.getContext('2d');
+if (which == "background") {
+    if (Map2[x][y].type == "stone") {ctx.fillStyle = 'rgba(32,32,32,1)';}
+     else if (Map2[x][y].type == "dirt") {ctx.fillStyle = 'rgba(55,34,3,1)';}
+      else if (Map2[x][y].type == "grass") {ctx.fillStyle = 'rgba(4,71,4,1)';}
+} else if (which == "foreground") {
+    if (Map[x][y].type == "wood") {ctx.fillStyle = 'rgba(128,67,48,1)';}
+     else if (Map[x][y].type == "leaves") {ctx.fillStyle = 'rgba(65,176,71,1)';}
+      else if (Map[x][y].type == "stone") {ctx.fillStyle = 'rgba(94,91,91,1)';}
+       else if (Map[x][y].type == "dirt") {ctx.fillStyle = 'rgba(87,55,7,1)';}
+        else if (Map[x][y].type == "grass") {ctx.fillStyle = 'rgba(15,119,15,1)';}
+} else {// probably inventory
+    if (Inventory[x].type == "wood") {ctx.fillStyle = 'rgba(128,67,48,1)';}
+     else if (Inventory[x].type == "leaves") {ctx.fillStyle = 'rgba(65,176,71,1)';}
+      else if (Inventory[x].type == "stone") {ctx.fillStyle = 'rgba(94,91,91,1)';}
+       else if (Inventory[x].type == "dirt") {ctx.fillStyle = 'rgba(87,55,7,1)';}
+        else if (Inventory[x].type == "grass") {ctx.fillStyle = 'rgba(15,119,15,1)';}
+    }
+}
+
+
+function draw_inventory() {
+    const canvas = document.getElementById('canvas');
+                    const ctx = canvas.getContext('2d');
+
+    ctx.beginPath();
+            ctx.rect(420, 0, 200, 420);
+            ctx.fillStyle = 'rgba(207,207,207,1)';
+            ctx.fill()
+
+    ctx.font = "20px pixel";
+    ctx.fillStyle = 'rgba(0,0,0,1)';
+    ctx.fillText("This game was created", 435,20)
+    ctx.fillText("by out_stone", 470, 40)
+            
+                for (k=1;k < 7; k++) {
+                    for (l=1;l < 5; l++) {
+                        if (Inventory[(k-1)*4 + l - 1].number > 0) {
+                            if (chosen != "not set") {
+                                if ((k-1)*4 + l - 1 == chosen) {
+                                    ctx.beginPath();
+                                    ctx.fillStyle = 'rgba(117,196,173,1)';
+                                    ctx.rect(390 + l*(190/4) - 5,160 + k*(220/6) - 5,30,30)
+                                ctx.fill();
+                                    }}
+
+                            ctx.beginPath();
+                                color(2,(k-1)*4 + l - 1,0)
+                            ctx.rect(390 + l*(190/4),160 + k*(220/6),20,20)
+                            ctx.fill();
+
+                            ctx.fillStyle = 'rgba(0,0,0,1)';
+                            ctx.fillText(Inventory[(k-1)*4 + l - 1].number, 400 + l * (190/4),193 + k * (220/6))
+                            
+                        } else {ctx.beginPath();
+                                ctx.fillStyle = 'rgba(255,40,0,1)';
+                                ctx.moveTo(390 + l*(190/4) + 5, 160 + k*(220/6));
+                                ctx.lineTo(390 + l*(190/4) + 20, 160 + k*(220/6) +15);
+                                ctx.lineTo(390 + l*(190/4) + 15, 160 + k*(220/6) + 20);
+                                ctx.lineTo(390 + l*(190/4), 160 + k*(220/6) + 5);
+                                ctx.fill();
+
+                                ctx.beginPath();
+                                ctx.fillStyle = 'rgba(255,40,0,1)';
+                                ctx.moveTo(390 + l*(190/4) + 15, 160 + k*(220/6));
+                                ctx.lineTo(390 + l*(190/4),160 + k*(220/6) + 15);
+                                ctx.lineTo(390 + l*(190/4) + 5, 160 + k*(220/6) + 20);
+                                ctx.lineTo(390 + l*(190/4) + 20, 160 + k*(220/6) + 5);
+                                ctx.fill();
+}}}
+
+for (k=1;k < 4; k++) {
+    for (l=1;l < 4; l++) {
+        ctx.beginPath();
+        ctx.fillStyle = 'rgba(118,118,122,1';
+        ctx.rect(390 + l*(190/4)-5,10 + k*(45),30,30);
+        ctx.fill();
+}
+}
+        ctx.beginPath();
+        ctx.fillStyle = 'rgba(118,118,122,1';
+        ctx.rect(580-5,100,30,30);
+        ctx.fill();
+}
+        </script>
+        <script src=".\recipies.js"></script>
+    </body>
+</html>

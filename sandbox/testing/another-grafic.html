@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+        canvas {
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body onmousedown="WhichButton(event)">
+        <canvas height="220" width="220" id="canvas"></canvas>
+        <script>
+function WhichButton(event) {
+    if (event.button == 0) {mine()}
+}
+
+            var X = [],px,py;old_px = 0;old_py = 0, last = 0
+
+            for (i = 0;i < 20;i ++) {
+                X[i] = []
+                for (j = 0;j < 20;j ++) {
+                    if (j > 8) {
+                    X[i][j] = 2} else {X[i][j] = 0}
+                }
+            }
+
+gen_tree()
+//color of leaves - rgb 65,176,71
+//color of wood - 128, 67, 48
+function gen_tree() {
+    l = 0
+for (i=0;i<X.length;i++) {
+    random = Math.floor(Math.random() * 101) - 1;
+    if (random < 21 && l < 1) {
+        l = 4
+        draw_tree(i)
+    }
+l --
+}
+}
+
+function draw_tree(i) {
+    for (j=0;j<X[i].length;j++) {
+        if (X[i][j] > 1) {
+            X[i][j-1] = 6;
+            if (j-2 >= 0 && j-2 < X[i].length) {if (X[i][j-2] == 0) {X[i][j-2] = 6;}}
+
+            if (j-3 >= 0 && j-3 < X[i].length) {if (X[i][j-3] == 0) {X[i][j-3] = 5;}
+            if (i-1 >= 0 && i-1 < X.length) {if (X[i-1][j-3] == 0) {X[i-1][j-3] = 5;}}
+            if (i+1 >= 0 && i+1 < X.length) {if (X[i+1][j-3] == 0) {X[i+1][j-3] = 5;}}}
+
+            if (j-4 >= 0 && j-4 < X[i].length) {if (X[i][j-4] == 0) {X[i][j-4] = 5;}
+            if (i-1 >= 0 && i-1 < X.length) {if (X[i-1][j-4] == 0) {X[i-1][j-4] = 5;}}
+            if (i+1 >= 0 && i+1 < X.length) {if (X[i+1][j-4] == 0) {X[i+1][j-4] = 5;}}}
+
+            if (j-5 >= 0 && j-5 < X[i].length) {if (X[i][j-5] == 0) {X[i][j-5] = 5;}}
+            break
+        }
+    }
+}
+
+            px = Math.floor(Math.random() * ((X.length - 1) + 1));
+
+px = 0
+py = 0
+
+
+            draw()
+//----------------------------------------mine() function----------------------------------------//
+            function draw(){
+
+                if (px < 6) {move_x = 5 - px} else if (px > (X.length - 1) - 6) {move_x = (X.length - 1) - 5 - px} else {move_x = 0}
+                if (py < 6) {move_y = 5 - py} else if (py > (X[0].length - 1) - 6) {move_y = (X[0].length - 1) - 5 - py} else {move_y = 0}
+
+                X[px][py] = 10
+        const canvas = document.getElementById('canvas');
+                    const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                for (i = -5; i < 6; i ++){
+    for (j = -5; j < 6; j ++){
+                if (X[px + i + move_x][py + j + move_y] == 10) {
+                        ctx.beginPath();
+                    ctx.rect((i + 5) * 20 + 5, (j + 5) * 20 + 5, 10, 10);
+                    ctx.fillStyle = 'black'
+                    ctx.fill();
+                    continue
+                    }
+                    if (X[px + i + move_x][py + j + move_y] == 2) {
+                    ctx.beginPath();
+                    ctx.rect((i + 5) * 20, (j + 5) * 20, 20, 20);
+                    ctx.fillStyle = 'gray'
+                    ctx.fill()
+                    } else if (X[px + i + move_x][py + j + move_y] == 6) {
+                    ctx.beginPath();
+                    ctx.rect((i + 5) * 20, (j + 5) * 20, 20, 20);
+                    ctx.fillStyle = 'brown'
+                    ctx.fill()
+                    } else if (X[px + i + move_x][py + j + move_y] == 5) {
+                    ctx.beginPath();
+                    ctx.rect((i + 5) * 20, (j + 5) * 20, 20, 20);
+                    ctx.fillStyle = 'green'
+                    ctx.fill()
+                    }
+}
+
+
+
+}}window.addEventListener('keydown', function (e) {
+      if (e.key == "d") {
+            last = 1
+        if (px + 1 < X.length) {
+            px ++
+            draw()
+        }
+  }}, false);
+  window.addEventListener('keydown', function (e) {
+      if (e.key == "a") {
+            last = 3
+        if (px - 1 >= 0) {
+            px --
+            draw()
+        }
+  }}, false);
+  window.addEventListener('keydown', function (e) {
+      if (e.key == "s") {
+            last = 2
+        if (py + 1 < X[px].length) {
+            py ++
+            draw()
+        }
+  }}, false);
+  window.addEventListener('keydown', function (e) {
+
+      if (e.key == "w") {
+            last = 0
+        if (py - 1 >= 0) {
+            
+            py --
+            draw()
+        }
+  }}, false);
+        </script>
+    </body>
+</html>

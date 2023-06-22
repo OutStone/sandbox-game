@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+        canvas {
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body onmousedown="WhichButton(event)">
+        <canvas height="400" width="400" id="canvas"></canvas>
+        <script>
+function WhichButton(event) {
+    if (event.button == 0) {mine()}
+}
+
+            var X = [],px,py;old_px = 0;old_py = 0, last = 0
+
+            for (i = 0;i < 20;i ++) {
+                X[i] = []
+                for (j = 0;j < 20;j ++) {
+                    if (j > 8) {X[i][j] = 1} else {X[i][j] = 0}
+                }
+            }
+
+            px = Math.floor(Math.random() * ((X.length - 1) + 1));
+            for (i = 0; i < X[px].length; i++) {
+                console.log(i)
+                if (X[px][i] > 0) {py = i - 1;console.log("nasel jsem"); break}
+            }
+
+            draw()
+//----------------------------------------mine() function----------------------------------------//
+    function mine() {
+        if (last == 0) {X[px][py-1] = 0;draw()}
+        else if (last == 1) {X[px+1][py] = 0;draw()}
+        else if (last == 2) {X[px][py+1] = 0;draw()}
+        else {X[px-1][py] = 0;draw()}
+    }
+            function draw(){
+                X[px][py] = 10
+
+                    const canvas = document.getElementById('canvas');
+                    const ctx = canvas.getContext('2d');
+                ctx.clearRect(px * 20 - 100, py * 20 - 100, 200, 200);
+            for (i = 0;i < X.length;i ++) {
+                for (j = 0;j < X[i].length;j ++) {
+
+                    if (X[i][j] == 10) {
+                        ctx.beginPath();
+                    ctx.rect(i * 20 + 5, j * 20 + 5, 10, 10);
+                    ctx.fillStyle = 'black'
+                    ctx.fill();
+                    continue
+                    }
+                    if (X[i][j] == 1) {
+                    ctx.beginPath();
+                    ctx.rect(i * 20, j * 20, 20, 20);
+                    ctx.fillStyle = 'gray'
+                    ctx.fill()
+                    }
+                }
+            }}
+
+            window.addEventListener('keydown', function (e) {
+      if (e.key == "d") {
+            last = 1
+        if (px + 1 < X.length) {
+            if (X[px + 1][py] == 0 ) {
+            X[px][py] = 0
+            old_px = px
+            old_py = py
+            px ++
+            draw()
+            } else {mine()}
+        }
+  }}, false);
+  window.addEventListener('keydown', function (e) {
+      if (e.key == "a") {
+            last = 3
+        if (px - 1 >= 0) {
+            if (X[px - 1][py] == 0 ) {
+            X[px][py] = 0
+            old_px = px
+            old_py = py
+            px --
+            draw()
+            } else {mine()}
+        }
+  }}, false);
+  window.addEventListener('keydown', function (e) {
+      if (e.key == "s") {
+            last = 2
+        if (py + 1 < X[px].length) {
+            if (X[px][py + 1] == 0 ) {
+            X[px][py] = 0
+            old_px = px
+            old_py = py
+            py ++
+            draw()
+        } else {mine()}
+        }
+  }}, false);
+  window.addEventListener('keydown', function (e) {
+      if (e.key == "w") {
+            last = 0
+        if (py - 1 >= 0) {
+            if (X[px][py - 1] == 0) {
+            X[px][py] = 0
+            old_px = px
+            old_py = py
+            py --
+            draw()
+            } else {mine()}
+        }
+  }}, false);
+
+        </script>
+    </body>
+</html>

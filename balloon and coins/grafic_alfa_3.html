@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="utf-8" />
+    <title>hot air balloon - garfic alfa 3</title>
+    <script>
+const bomb_img= new Image();
+const hab_img = new Image();
+const coin_img = new Image();
+
+const konec = {konec:0}
+const balloon = {
+    x: 50,
+    y: 150,
+    move: 0,
+    radius: 25,
+
+    draw() {
+        const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+ctx.drawImage(hab_img,this.x - 25, this.y - 25, 44, 70)
+/*
+ctx.save();
+ctx.beginPath();
+ctx.arc(this.x,this.y,this.radius, 0, Math.PI * 2, true);
+ctx.fillStyle = 'rgba(13,161,85, 1)';
+ctx.fill();
+ctx.restore();*/
+    }
+}
+
+const score = {
+  score: 0,
+draw() {
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        var dat = new Date();
+        var zbcas = 59 - (Math.floor(dat.getTime() / 1000) - time.sec)
+  ctx.font = '48px serif';
+  ctx.fillText('your score is: ' + score.score , 10, 50);
+  ctx.fillText('time left: ' + zbcas , 10, 100);
+}
+}
+
+ const time = {
+  sec: 0,
+  inc: 1,
+  check(){
+    var dat = new Date();
+if (time.inc == 1) {
+  time.sec = Math.floor(dat.getTime() / 1000);
+  time.inc = 0 ;
+}
+if (time.sec + 60 <= Math.floor(dat.getTime() / 1000)) {endscreen()}}
+ }
+
+ 
+const sq = {x: 0,y: 0,}
+
+function square(x) {
+return x * x 
+}
+
+/*========================================================================================================================================================
+mince
+========================================================================================================================================================*/
+class Coin{
+ 
+ constructor(){
+   this.x = 1900;
+   this.y = Math.floor(Math.random() * 576)+ 12;
+   this.move = Math.floor(Math.random() * 10) + 5;
+   this.radius = 12;
+ }
+}
+
+var coins = []
+
+for (let i = 0; i < 10; i++) {
+  coins[i] = new Coin()
+}
+
+function cdraw(name) {
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        ctx.drawImage(coin_img,name.x - 12, name.y - 12, 24, 24)
+/*
+ctx.save();
+ctx.beginPath();
+ctx.arc(name.x,name.y,name.radius, 0, Math.PI * 2, true);
+ctx.fillStyle = 'rgba(223,202,0,1)';
+ctx.fill();
+
+ctx.beginPath();
+ctx.arc(name.x,name.y,name.radius - 2, 0, Math.PI * 2, true);
+ctx.fillStyle = 'rgba(238,216,0,1)';
+ctx.fill();
+
+ctx.fillStyle = 'rgba(0,0,0,1)';
+ctx.font = '18px serif';
+ctx.fillText('$', name.x - 4.5, name.y + 5.5);
+ctx.restore();*/
+    }
+/*========================================================================================================================================================
+mince
+========================================================================================================================================================*/
+var bombs = []
+
+for (let i = 0; i < 10; i++) {
+  bombs[i] = new Coin()
+}
+
+function bdraw(name) {
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(bomb_img,name.x - 12, name.y - 12, 24, 24)
+        /*
+ctx.save();
+ctx.beginPath();
+ctx.arc(name.x,name.y,name.radius, 0, Math.PI * 2, true);
+ctx.fillStyle = 'rgba(223,202,0,1)';
+ctx.fill();
+
+ctx.beginPath();
+ctx.arc(name.x,name.y,name.radius - 2, 0, Math.PI * 2, true);
+ctx.fillStyle = 'rgba(238,216,0,1)';
+ctx.fill();
+
+ctx.restore();*/
+}
+
+/*========================================================================================================================================================
+hlavní kód
+========================================================================================================================================================*/
+function wait() {
+  console.log("loading numr 2")
+  hab_img.onload = () => {
+    console.log("2 has loaded")
+    wait2();
+  };
+  window.requestAnimationFrame(wait);
+}
+function wait2() {
+  bomb_img.onload = () => {
+    console.log("3 has loaded")
+    draw();
+  };
+  window.requestAnimationFrame(wait2);
+}
+
+function draw() {
+
+        const canvas = document.getElementById("canvas");
+          const ctx = canvas.getContext("2d");
+        
+          ctx.clearRect(0, 0, 1918, 600);
+  
+  
+for (let i = 0; i < coins.length; i++) {cdraw(coins[i]);}
+for (let i = 0; i < bombs.length; i++) {bdraw(bombs[i]);}
+
+          balloon.draw();
+          score.draw();
+          time.check();
+          balloon.y += balloon.move;
+
+//============================================================================================
+ 
+
+if (balloon.y + balloon.radius > canvas.height) {
+    balloon.y = canvas.height - balloon.radius ;
+}
+if (balloon.y - balloon.radius < 0) {
+    balloon.y = 0 + balloon.radius ;
+}
+
+//===================
+
+for (let i = 0; i < coins.length; i++) {
+ if (coins[i].x == 153) { continue; }
+
+  if (coins[i].x < 0 - coins[i].radius) {
+    coins[i] = new Coin();
+    continue;
+}
+
+sq.x = square(balloon.x - coins[i].x)
+sq.y = square(balloon.y - coins[i].y)
+if (Math.sqrt(sq.x + sq.y) <= balloon.radius + coins[i].radius) {
+  score.score += 1;
+  coins[i] = new Coin();
+  continue;
+}
+
+coins[i].x -= coins[i].move;
+}
+
+for (let i = 0; i < bombs.length; i++) {
+  if (bombs[i].x == 153) { continue; }
+
+  if (bombs[i].x < 0 - bombs[i].radius) {
+    bombs[i] = new Coin();
+  continue;
+}
+
+sq.x = square(balloon.x - bombs[i].x)
+sq.y = square(balloon.y - bombs[i].y)
+if (Math.sqrt(sq.x + sq.y) <= balloon.radius + bombs[i].radius) {endscreen()}
+
+bombs[i].x -= bombs[i].move;
+}
+
+if (konec.konec == 1) {return} else { 
+     window.requestAnimationFrame(draw);
+      }}
+/*========================================================================================================================================================
+koncová obrazovka
+========================================================================================================================================================*/
+function endscreen() {
+  const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, 1918, 600);
+
+  ctx.font = '48px serif';
+  if (score.score == 1) {
+    var dat = new Date();
+    var zbcas = (Math.floor(dat.getTime() / 1000) - time.sec)
+   ctx.fillText('In ' + zbcas + ' seconds you got ' + score.score + ' point.' , 600, 300);}
+  else {
+    var dat = new Date();
+    var zbcas = (Math.floor(dat.getTime() / 1000) - time.sec)
+    ctx.fillText('In ' + zbcas + ' seconds you got ' + score.score + ' points.' , 600, 300);}
+    ctx.fillText("Press 'Enter' to start a new game.", 565, 350);
+    konec.konec = 1;
+
+
+}
+/*========================================================================================================================================================
+ovládání
+========================================================================================================================================================*/
+      window.addEventListener('keydown', function (e) {
+if (e.key == "w") {
+    balloon.move = - 5;
+}}, false);
+window.addEventListener('keyup', function (e) {
+    if (e.key == "w" || e.key == "s") {
+        balloon.move = 0 ;
+}}, false);
+window.addEventListener('keydown', function (e) {
+    if (e.key == "s") {
+        balloon.move = 5 ;
+}}, false);
+
+
+window.addEventListener('keydown', function (e) {
+if (e.key == "Enter") {
+    if (konec.konec == 1) {
+    score.score = 0
+    time.inc = 1
+for (let i = 0; i < coins.length; i++) {
+      coins[i] = new Coin();
+}
+for (let i = 0; i < bombs.length; i++) {
+      bombs[i] = new Coin();
+}
+    konec.konec = 0;
+    draw();
+}}}, false);
+
+
+
+  coin_img.onload = () => {
+    console.log("it has loaded")
+    wait();
+  };
+  coin_img.src = 'coin.png';
+  hab_img.src = 'hab.png';
+  bomb_img.src = 'bomb.png';
+
+    </script>
+    <style>
+      canvas {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body  style="margin: 0px;">
+    <canvas id="canvas" style="margin: 0px;" width="1918" height="600"></canvas>
+    <p id="demo"></p>
+    <p id="demo2"></p>
+  </body>
+</html>

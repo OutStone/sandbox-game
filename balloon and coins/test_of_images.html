@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <title>test of images</title>
+    <script>
+      function draw() {
+  const ctx = document.getElementById('canvas').getContext('2d');
+  const img = new Image();
+  img.onload = () => {
+    ctx.drawImage(img, 0, 0);
+  };
+  img.src = 'test.png';
+  window.requestAnimationFrame(draw);
+}
+    </script>
+    <style>
+      canvas {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body onload="draw();">
+    <canvas id="canvas" width="1900" height="600"></canvas>
+  </body>
+</html>

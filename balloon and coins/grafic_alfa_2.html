@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="utf-8" />
+    <title>hot air balloon - garfic alfa 2</title>
+    <script>
+const konec = {konec:0}
+const balloon = {
+    x: 50,
+    y: 150,
+    move: 0,
+    radius: 25,
+
+    draw() {
+        const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+ctx.save();
+ctx.beginPath();
+ctx.arc(this.x,this.y,this.radius, 0, Math.PI * 2, true);
+ctx.fillStyle = 'rgba(13,161,85, 1)';
+ctx.fill();
+ctx.restore();
+    }
+}
+
+const score = {
+  score: 0,
+draw() {
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        var dat = new Date();
+        var zbcas = 59 - (Math.floor(dat.getTime() / 1000) - time.sec)
+  ctx.font = '48px serif';
+  ctx.fillText('your score is: ' + score.score , 10, 50);
+  ctx.fillText('time left: ' + zbcas , 10, 100);
+}
+}
+
+ const time = {
+  sec: 0,
+  inc: 1,
+  check(){
+    var dat = new Date();
+if (time.inc == 1) {
+  time.sec = Math.floor(dat.getTime() / 1000);
+  time.inc = 0 ;
+}
+if (time.sec + 60 <= Math.floor(dat.getTime() / 1000)) {endscreen()}}
+ }
+
+ 
+const sq = {
+x: 0,
+y: 0,
+}
+
+function square(x) {
+return x * x 
+}
+
+/*========================================================================================================================================================
+mince
+========================================================================================================================================================*/
+const coin = {draw(name) {
+        const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+if (name.inc == 1 ) {
+  name.y = Math.floor(Math.random() * 576)+ 12 ;
+  name.move = Math.floor(Math.random() * 10) + 5;
+  name.x = 1900;
+name.inc = 0;
+} 
+ctx.save();
+ctx.beginPath();
+ctx.arc(name.x,name.y,name.radius, 0, Math.PI * 2, true);
+ctx.fillStyle = 'rgba(223,202,0,1)';
+ctx.fill();
+
+ctx.beginPath();
+ctx.arc(name.x,name.y,name.radius - 2, 0, Math.PI * 2, true);
+ctx.fillStyle = 'rgba(238,216,0,1)';
+ctx.fill();
+
+ctx.fillStyle = 'rgba(0,0,0,1)';
+ctx.font = '18px serif';
+ctx.fillText('$', name.x - 4.5, name.y + 5.5);
+ctx.restore();
+    }}
+
+const coin1 = {
+    x: 1900,
+    y: 0,
+    inc: 1,
+    move: 0,
+    radius: 12,
+    
+}
+const coin2 = {
+    x: 1900,
+    y: 0,
+    inc: 1,
+    move: 0,
+    radius: 12,
+    
+}
+const coin3 = {
+    x: 1900,
+    y: 0,
+    inc: 1,
+    move: 0,
+    radius: 12,
+    
+}
+const coin4 = {
+    x: 1900,
+    y: 0,
+    inc: 1,
+    move: 0,
+    radius: 12,
+    
+}
+const coin5 = {
+    x: 1900,
+    y: 0,
+    inc: 1,
+    move: 0,
+    radius: 12,
+    
+}
+const coin6 = {
+    x: 1900,
+    y: 0,
+    inc: 1,
+    move: 0,
+    radius: 12,
+    
+}
+const coin7 = {
+    x: 1900,
+    y: 0,
+    inc: 1,
+    move: 0,
+    radius: 12,
+    
+}
+const coin8 = {
+    x: 1900,
+    y: 0,
+    inc: 1,
+    move: 0,
+    radius: 12,
+    
+}
+const coin9 = {
+    x: 1900,
+    y: 0,
+    inc: 1,
+    move: 0,
+    radius: 12,
+    
+}
+const coin10 = {
+    x: 1900,
+    y: 0,
+    inc: 1,
+    move: 0,
+    radius: 12,
+    
+}
+/*========================================================================================================================================================
+miny
+========================================================================================================================================================*/
+const bomb = {draw(name) {
+        const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+if (name.inc == 1 ) {
+  name.y = Math.floor(Math.random() * 576)+ 12 ;
+  name.move = Math.floor(Math.random() * 10) + 5;
+  name.x = 1900;
+name.inc = 0;
+} 
+ctx.save();
+ctx.beginPath();
+ctx.arc(name.x,name.y,name.radius, 0, Math.PI * 2, true);
+ctx.fillStyle = 'rgba(223,202,0,1)';
+ctx.fill();
+
+ctx.beginPath();
+ctx.arc(name.x,name.y,name.radius - 2, 0, Math.PI * 2, true);
+ctx.fillStyle = 'rgba(238,216,0,1)';
+ctx.fill();
+
+/*
+ctx.fillStyle = 'rgba(0,0,0,1)';
+ctx.font = '18px serif';
+ctx.fillText('$', name.x - 4.5, name.y + 5.5);*/
+ctx.restore();
+    }}
+
+const bomb1 = {
+    x: 1900,
+    y: 0,
+    inc: 1,
+    move: 0,
+    radius: 12,
+    
+}
+const bomb2 = {
+    x: 1900,
+    y: 0,
+    inc: 1,
+    move: 0,
+    radius: 12,
+    
+}
+const bomb3 = {
+    x: 1900,
+    y: 0,
+    inc: 1,
+    move: 0,
+    radius: 12,
+    
+}
+const bomb4 = {
+    x: 1900,
+    y: 0,
+    inc: 1,
+    move: 0,
+    radius: 12,
+    
+}
+const bomb5 = {
+    x: 1900,
+    y: 0,
+    inc: 1,
+    move: 0,
+    radius: 12,
+    
+}
+const bomb6 = {
+    x: 1900,
+    y: 0,
+    inc: 1,
+    move: 0,
+    radius: 12,
+    
+}
+const bomb7 = {
+    x: 1900,
+    y: 0,
+    inc: 1,
+    move: 0,
+    radius: 12,
+    
+}
+const bomb8 = {
+    x: 1900,
+    y: 0,
+    inc: 1,
+    move: 0,
+    radius: 12,
+    
+}
+const bomb9 = {
+    x: 1900,
+    y: 0,
+    inc: 1,
+    move: 0,
+    radius: 12,
+    
+}
+const bomb10 = {
+    x: 1900,
+    y: 0,
+    inc: 1,
+    move: 0,
+    radius: 12,
+    
+}
+
+/*========================================================================================================================================================
+hlavní kód
+========================================================================================================================================================*/
+
+      function draw() {
+
+        const canvas = document.getElementById("canvas");
+          const ctx = canvas.getContext("2d");
+        
+          ctx.clearRect(0, 0, 1918, 600);
+
+
+          coin.draw(coin1);
+          coin.draw(coin2);
+          coin.draw(coin3);
+          coin.draw(coin4);
+          coin.draw(coin5);
+          coin.draw(coin6);
+          coin.draw(coin7);
+          coin.draw(coin8);
+          coin.draw(coin9);
+          coin.draw(coin10);
+          
+          bomb.draw(bomb1);
+          bomb.draw(bomb2);
+          bomb.draw(bomb3);
+          bomb.draw(bomb4);
+          bomb.draw(bomb5);
+          bomb.draw(bomb6);
+          bomb.draw(bomb7);
+          bomb.draw(bomb8);
+          bomb.draw(bomb9);
+          bomb.draw(bomb10);
+
+          balloon.draw();
+          score.draw();
+          time.check();
+          balloon.y += balloon.move;
+
+//============================================================================================
+ 
+
+if (balloon.y + balloon.radius > canvas.height) {
+    balloon.y = canvas.height - balloon.radius ;
+}
+if (balloon.y - balloon.radius < 0) {
+    balloon.y = 0 + balloon.radius ;
+}
+
+for ( i = 1; i < 11; i++) {
+  if (i == 1) {var c = coin1} else if (i == 2) {var c = coin2} else if (i == 3) {var c = coin3} else if (i == 4) {var c = coin4} else if (i == 5) {var c = coin5} else if (i == 6) {var c = coin6} else if (i == 7) {var c = coin7} else if (i == 8) {var c = coin8} else if (i == 9) {var c = coin9} else {var c = coin10}
+
+  c.x -= c.move;
+
+  if (c.x + c.radius + 1 < 0) {
+    c.inc = 1;
+}
+
+sq.x = square(balloon.x - c.x)
+sq.y = square(balloon.y - c.y)
+
+if (Math.sqrt(sq.x + sq.y) <= balloon.radius + c.radius) {
+  score.score += 1;
+   c.inc = 1;
+}
+}
+
+if (balloon.y + balloon.radius > canvas.height) {
+    balloon.y = canvas.height - balloon.radius ;
+}
+if (balloon.y - balloon.radius < 0) {
+    balloon.y = 0 + balloon.radius ;
+}
+
+//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//--//
+for ( i = 1; i < 11; i++) {
+  if (i == 1) {var c = bomb1} else if (i == 2) {var c = bomb2} else if (i == 3) {var c = bomb3} else if (i == 4) {var c = bomb4} else if (i == 5) {var c = bomb5} else if (i == 6) {var c = bomb6} else if (i == 7) {var c = bomb7} else if (i == 8) {var c = bomb8} else if (i == 9) {var c = bomb9} else {var c = bomb10}
+
+  c.x -= c.move;
+
+  if (c.x + c.radius + 1 < 0) {
+    c.inc = 1;
+}
+
+sq.x = square(balloon.x - c.x)
+sq.y = square(balloon.y - c.y)
+
+if (Math.sqrt(sq.x + sq.y) <= balloon.radius + c.radius) {
+  endscreen()
+}
+}
+
+if (konec.konec == 1) {return} else { 
+     window.requestAnimationFrame(draw);
+      }}
+/*========================================================================================================================================================
+koncová obrazovka
+========================================================================================================================================================*/
+function endscreen() {
+  const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, 1918, 600);
+
+  ctx.font = '48px serif';
+  if (score.score == 1) {
+    var dat = new Date();
+    var zbcas = (Math.floor(dat.getTime() / 1000) - time.sec)
+   ctx.fillText('In ' + zbcas + ' seconds you got ' + score.score + ' point.' , 600, 300);}
+  else {
+    var dat = new Date();
+    var zbcas = (Math.floor(dat.getTime() / 1000) - time.sec)
+    ctx.fillText('In ' + zbcas + ' seconds you got ' + score.score + ' points.' , 600, 300);}
+    ctx.fillText("Press 'Enter' to start a new game.", 565, 350);
+    konec.konec = 1;
+
+
+}
+/*========================================================================================================================================================
+ovládání
+========================================================================================================================================================*/
+      window.addEventListener('keydown', function (e) {
+if (e.key == "w") {
+    balloon.move = - 5;
+}}, false);
+window.addEventListener('keyup', function (e) {
+    if (e.key == "w" || e.key == "s") {
+        balloon.move = 0 ;
+}}, false);
+window.addEventListener('keydown', function (e) {
+    if (e.key == "s") {
+        balloon.move = 5 ;
+}}, false);
+
+
+window.addEventListener('keydown', function (e) {
+if (e.key == "Enter") {
+    if (konec.konec == 1) {
+    score.score = 0
+    time.inc = 1
+    for ( i = 1; i < 11; i++) {
+  if (i == 1) {var c = coin1} else if (i == 2) {var c = coin2} else if (i == 3) {var c = coin3} else if (i == 4) {var c = coin4} else if (i == 5) {var c = coin5} else if (i == 6) {var c = coin6} else if (i == 7) {var c = coin7} else if (i == 8) {var c = coin8} else if (i == 9) {var c = coin9} else {var c = coin10}
+   c.inc = 1
+  c.move = 0
+  }
+  for ( i = 1; i < 11; i++) {
+    if (i == 1) {var c = bomb1} else if (i == 2) {var c = bomb2} else if (i == 3) {var c = bomb3} else if (i == 4) {var c = bomb4} else if (i == 5) {var c = bomb5} else if (i == 6) {var c = bomb6} else if (i == 7) {var c = bomb7} else if (i == 8) {var c = bomb8} else if (i == 9) {var c = bomb9} else {var c = bomb10}
+   c.inc = 1
+  c.move = 0
+  }
+    konec.konec = 0;
+    draw();
+}}}, false);
+
+    </script>
+    <style>
+      canvas {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body onload="draw();" style="margin: 0px;">
+    <canvas id="canvas" style="margin: 0px;" width="1918" height="600"></canvas>
+    <p id="demo"></p>
+    <p id="demo2"></p>
+  </body>
+</html>

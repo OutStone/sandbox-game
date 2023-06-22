@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <title>Canvas tutorial</title>
+    <script>
+        var x = 1
+        y = 50
+        mn = [300,]
+        
+        function transl() {
+        const canvas = document.getElementById("canvas");
+          const ctx = canvas.getContext("2d");
+          ctx.translate(100,100)
+ctx.beginPath();
+    ctx.moveTo(800,0);
+    ctx.lineTo(-100, 0);
+    ctx.strokeStyle = 'rgba(255,0,0, 1)';
+    ctx.stroke();
+ctx.beginPath();
+    ctx.moveTo(0,800);
+    ctx.lineTo(0, -100);
+    ctx.stroke();
+        draw()}
+        
+      function draw() {
+        const canvas = document.getElementById("canvas");
+          const ctx = canvas.getContext("2d");
+        
+    ctx.fillStyle = 'rgba(0,0,0, 1)';
+        ctx.beginPath();
+        ctx.arc(mn[mn.lenght - 1] - 300, y*10, 100, 0, Math.PI * 2, true);
+        ctx.fill();
+
+        x = x + 0.1
+         y --
+         mn[mn.lenght] = mn[mn.lenght - 1] + 20
+         window.requestAnimationFrame(draw);
+      }
+    </script>
+    <style>
+      canvas {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body onload="transl();">
+    <canvas id="canvas" width="900" height="900"></canvas>
+  </body>
+</html>

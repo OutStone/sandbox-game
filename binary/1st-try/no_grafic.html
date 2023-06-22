@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            var copy
+
+function AND(a,b) {
+    if (a == 1 && b == 1) {return 1} else {return 0}
+}
+function XOR(a,b) {
+    if (a == 1 && b == 0 || a == 0 && b == 1) {return 1} else {return 0}
+}
+
+
+//================================
+class gate{
+ 
+ constructor(type,a,b){
+   this.type = type;
+   this.input_a = a;
+   this.input_b = b;
+   this.output = 0;
+   this.calcul = function () {if (this.type == 0) {this.output = AND(this.input_a,this.input_b); console.log("1")} else {this.output = XOR(this.input_a,this.input_b); console.log("1")}};
+   this.length = gates.length
+}}
+
+var gates = []
+   gates[0] = new gate(0,1,1)
+   gates[0].calcul()
+   copy = gates[0].output
+   gates[1] = new gate(0,copy,1)
+   gates[1].calcul()
+
+        </script>
+    </head>
+    <body>
+        
+        <p id="try" onclick=" document.getElementById('try').innerHTML = window.gates[0].output">click</p>
+        <p id="try1" onclick=" document.getElementById('try1').innerHTML = window.gates[1].output">click</p>
+        <p id="demo" onclick="document.getElementById('demo').innerHTML = gates[0].length">click</p>
+    </body>
+</html>

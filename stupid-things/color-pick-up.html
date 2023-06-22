@@ -1,0 +1,58 @@
+<html>
+    <head>
+        <style>
+            .output{
+                height: 100px;
+                width: 100px;
+                border-radius: 100px;
+            }
+            .color{
+                float: left;
+                text-align: center;
+            }
+            .colors {
+                width: 25%;
+            
+            }
+        </style>
+    </head>
+    <body onload="changeRGB()">
+    <div class="TheBigOne">
+            <div class="output" id="output"></div>
+        <div class="colors">
+            <div class="Color">
+                <p>RED</p>
+                <input onchange="changeRGB()" oninput="changeRGB()" type="range" id="Red" name="Red" value="0" min="0" max="255">
+                <div id="valred">0</div>
+            </div>
+            <div class="Color">
+                <p>GREEN</p>
+                <input onchange="changeRGB()" oninput="changeRGB()" type="range" id="Green" name="Green" value="0" min="0" max="255">
+                <div id="valgreen">0</div>
+            </div>
+            <div class="Color">
+                <p>BLUE</p>
+                <input onchange="changeRGB()" oninput="changeRGB()" type="range" id="Blue" name="Blue" value="0" min="0" max="255">
+                <div id="valblue">0</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+var Red;
+
+function changeRGB() {
+    var Blue = document.getElementById("Blue").value;
+    document.getElementById("valblue").innerHTML = Blue;
+
+    var Green = document.getElementById("Green").value;
+    document.getElementById("valgreen").innerHTML = Green;
+
+    var Red = document.getElementById("Red").value;
+    document.getElementById("valred").innerHTML = Red;
+    
+    document.getElementById("output").style.backgroundColor = "rgb(" + Red +","+ Green +","+ Blue + ")"
+}
+    </script>
+    </body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+
+        </style>
+    </head>
+    <body>
+        <canvas id="canvas" height="500px" width="500px"></canvas>
+        <script>
+            const canvas = document.getElementById("canvas");
+            const ctx = canvas.getContext("2d");
+
+            ctx.beginPath();
+            ctx.rect(0,0, 100, 100);
+            ctx.fillStyle = 'rgba(87,55,7,1)'
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.rect(100,0, 100, 100);
+            ctx.fillStyle = 'rgba(15,119,15,1)'
+            ctx.fill();         
+        </script>
+    </body>
+</html>

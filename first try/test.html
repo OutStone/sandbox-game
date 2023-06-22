@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <title>My sandbox game - alfa 2</title>
+    <script>
+    
+
+	const ball = {
+x: 100,
+vx: 10,
+y: 100,
+vy: 2,
+radius: 25,
+draw() {
+
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+ctx.beginPath();
+ctx.arc(this.x,this.y,this.radius, 0, Math.PI * 2, true);
+ctx.stroke();
+}
+}
+
+	const ball2 = {
+x: 200,
+vx: 10,
+y: 200,
+vy: 2,
+radius: 20,
+draw() {
+
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+ctx.beginPath();
+ctx.arc(this.x,this.y,this.radius, 0, Math.PI * 2, true);
+ctx.stroke();
+}
+}
+
+const save = {
+  x: 0,
+  y: 0,
+  vx: 0,
+  vy: 0,
+}
+
+function draw() {
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+ctx.save();
+
+ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.restore();
+
+ball.draw();
+//ctx.save();
+//ctx.fillStyle = 'rgba(255, 0, 0, 1)';
+//ctx.fillRect(ball.x - 18 ,ball.y - 18, 36, 36)
+//ctx.restore();
+
+ball.x += ball.vx;
+ball.y += ball.vy;
+
+ball2.draw();
+//ctx.save();
+//ctx.fillStyle = 'rgba(255, 0, 0, 1)';
+//ctx.fillRect(ball2.x - 14 ,ball2.y - 14, 28, 28)
+//ctx.restore();
+
+ball2.x += ball2.vx;
+ball2.y += ball2.vy;
+
+ball.vy *= 0.99
+ball.vy += 0.25
+ball.vx *= 0.99
+
+ball2.vy *= 0.99
+ball2.vy += 0.25
+ball2.vx *= 0.99
+
+
+
+if (ball.y + ball.vy + 13 > canvas.height) {
+  ball.vy = -ball.vy;
+  ball.y = canvas.height - ball.vy - 13 ;
+}
+if (ball.y + ball.vy - 13 < 0) {
+  ball.vy = -ball.vy;
+  ball.y = 0 + ball.vy + 13 ;
+}
+if (ball.x + ball.vx + 13 > canvas.width) {
+  ball.vx = -ball.vx;
+  ball.x = canvas.width - ball.vx - 13 ;
+}
+if (ball.x + ball.vx - 13 < 0) {
+  ball.vx = -ball.vx;
+  ball.x = 0 + ball.vx + 13 ;
+}
+
+if (ball2.y + ball2.vy + 13 > canvas.height) {
+  ball2.vy = -ball2.vy;
+  ball2.y = canvas.height - ball2.vy - 13 ;
+}
+if (ball2.y + ball2.vy - 13 < 0) {
+  ball2.vy = -ball2.vy;
+  ball2.y = 0 + ball2.vy + 13 ;
+}
+if (ball2.x + ball2.vx + 13 > canvas.width) {
+  ball2.vx = -ball2.vx;
+  ball2.x = canvas.width - ball2.vx - 13 ;
+}
+if (ball2.x + ball2.vx - 13 < 0) {
+  ball2.vx = -ball2.vx;
+  ball2.x = 0 + ball2.vx + 13 ;
+}
+
+
+
+if (ball.x + 13 >= ball2.x - 11 && ball.y +13 >= ball2.y - 11 && ball.x - 13 <= ball2.x - 11 && ball.y - 13 <= ball2.y - 11 || ball.x + 13 >= ball2.x + 11 && ball.y +13 >= ball2.y - 11 && ball.x - 13 <= ball2.x + 11 && ball.y - 13 <= ball2.y - 11 || ball.x + 13 >= ball2.x - 11 && ball.y +13 >= ball2.y + 11 && ball.x - 13 <= ball2.x - 11 && ball.y - 13 <= ball2.y + 11 || ball.x + 13 >= ball2.x + 11 && ball.y +13 >= ball2.y + 11 && ball.x - 13 <= ball2.x + 11 && ball.y - 13 <= ball2.y + 11 ) {
+ // ball.vy = -ball.vy;
+ // ball.vx = -ball.vx;
+  
+ // ball2.vy = -ball2.vy;
+ // ball2.vx = -ball2.vx;
+
+  save.vy = ball.vy;
+  save.vx = ball.vx;
+
+  ball.vy = ball2.vy / 1.8;
+  ball.vx = ball2.vx / 1.8;
+
+  
+  ball2.vy = save.vy * 1.8;
+  ball2.vx = save.vx * 1.8;
+}
+
+
+raf = window.requestAnimationFrame(draw);
+}
+
+window.addEventListener('keydown', function (e) {
+if (e.key == "w") {ball.vy -= 5}
+}, false);
+
+window.addEventListener('keydown', function (e) {
+if (e.key == "s") {ball.vy += 5}
+}, false);
+
+window.addEventListener('keydown', function (e) {
+if (e.key == "a") {ball.vx -= 5}
+}, false);
+
+window.addEventListener('keydown', function (e) {
+if (e.key == "d") {ball.vx += 5}
+}, false);
+
+window.addEventListener('keydown', function (e) {
+if (e.key == " ") {
+  ball.vx = 0 ;
+  ball2.vx = 0 ;
+}
+}, false);
+
+
+
+window.addEventListener('keydown', function (e) {
+if (e.key == "i") {ball2.vy -= 5}
+}, false);
+
+window.addEventListener('keydown', function (e) {
+if (e.key == "k") {ball2.vy += 5}
+}, false);
+
+window.addEventListener('keydown', function (e) {
+if (e.key == "j") {ball2.vx -= 5}
+}, false);
+
+window.addEventListener('keydown', function (e) {
+if (e.key == "l") {ball2.vx += 5}
+}, false);
+
+window.addEventListener('keydown', function (e) {
+if (e.key == " ") {ball.vx = 0}
+}, false);
+
+
+    </script>
+  </head>
+
+  <body onload="draw()"> 
+    <canvas id="canvas" style="border: 1px solid black;" width="600" height="600"></canvas>
+    <p id="demo">w ..... move up<br>s ..... move down<br>a ..... move to right<br>d ..... move to left<br>i ..... move up<br>k ..... move down<br>j ..... move to right<br>l ..... move to left<br>space bar ..... stop horizontal movement of both balls</p>
+    <button onclick="ball.vy -= 5" style="padding: 50px; margin-left: 109px;margin-bottom: 5px;"></button><br>
+    <button onclick="ball.vx -= 5"style="padding: 50px; margin-right: 5px;"></button><button onclick="ball.vx = 0" style="padding: 50px; margin-right: 5px;"></button><button onclick="ball.vx += 5" style="padding: 50px;"></button><br>
+    <button onclick="ball.vy += 5" style="padding: 50px; margin-left: 109px;margin-top: 5px;"></button><br>
+
+    
+  </body>
+</html>
