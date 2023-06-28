@@ -23,7 +23,7 @@ class Block{
 }
 //------------------------------------Terrain generation------------------------------------//
 //variables
-var start = 20,non = 30,up1 = 30,up2 = 5,do1 = 30,do2 = 5
+var start = 40,non = 30,up1 = 30,up2 = 5,do1 = 30,do2 = 5
 for (let i = 0; i < world_width; i++){
 
 random = Math.floor(Math.random() * 101) - 1;
@@ -93,8 +93,8 @@ for (g = 0; g < 8; g ++) {
 //------------------------------------Implementation------------------------------------//
 for (i = 0; i < Map.length; i ++) {
     for (j = 0; j < Map[i].length; j ++) {
-        if (Map[i][j].type == "stone") {
-            if (Cave[i][j] == 0) {
+        if (Map[i][j].type === "stone") {
+            if (Cave[i][j] === 0) {
                 Map[i][j].type = "air"
             }
         }
@@ -117,7 +117,7 @@ for (i=0;i<Map.length;i++) {
 
 function draw_tree(i) {
     for (j=0;j<Map[i].length;j++) {
-        if (Map[i][j+1].type != "air") {
+        if (Map[i][j+1].type !== "air") {
             Map[i][j].type = "wood";
             Map[i][j-1].type = "wood";
 
@@ -149,41 +149,53 @@ px = Math.floor(Math.random() * ((Map.length - 1) + 1));
             }
 
 //-------------Controls-------------//
-window.addEventListener('keydown', function (e) {
-    if (e.key == "d") {
-        if (px + 1 < Map.length) {
-            if (Map[px + 1][py].type == "air" ) {
-                Map[px][py] = new Block("air")
-            px ++
-            } else {mine(e.key)}
-        }
+window.addEventListener('keydown', (e) => {
+
+    e = e.key;
+
+    if (e === "d") {
+        go([px + 1, py]);
     }
-    if (e.key == "a") {
-        if (px - 1 >= 0) {
-            if (Map[px - 1][py].type == "air" ) {
-                Map[px][py] = new Block("air")
-            px --
-            } else {mine(e.key)}
-        }
+    if (e === "a") {
+        go([px - 1, py]);
     }
-    if (e.key == "s") {
-        if (py + 1 < Map[px].length) {
-            if (Map[px][py + 1].type == "air" ) {
-                Map[px][py] = new Block("air")
-            py ++
-            } else {mine(e.key)}
-        }
+    if (e === "s") {
+        go([px, py + 1]);
     }
-    if (e.key == "w") {
-        if (py - 1 >= 0) {
-            if (Map[px][py - 1].type == "air" ) {
-                Map[px][py] = new Block("air")
-            py --
-            } else {mine(e.key)}
-        }
+    if (e === "w") {
+        go([px, py - 1]);
     }
 draw()
 }, false);
+
+
+function go(where){
+    if(!Array.isArray(where)){
+        throw new Error("not an array")
+    }
+
+    if(Map[where[0]] === undefined || Map[px][where[1]] === undefined){
+        return;
+    }
+
+    if (Map[where[0]][where[1]].type === "air" ) {
+        Map[px][py] = new Block("air")
+
+        if(where[0] > px){
+            px++;
+        } else if(where[0] < px){
+            px--;
+        }
+
+        if(where[1] > py){
+            py++;
+        } else if(where[1] < py){
+            py--;
+        }
+    }else{
+        mine(where);
+    }
+}
 //---------------------------mouse build-------------------------------//
 document.getElementById("canvas").addEventListener('click', function(evt) {
     var mousePos = getMousePos( evt);
@@ -246,24 +258,11 @@ function cursor(index) {
 }
 
 //---------------------------Mine function-------------------------------//
-function mine(key) {
-        if (key == "w") {inventory_add(Inventory,Map[px][py-1].type,1);
-            Map[px][py-1] = new Block("air") ;draw();}
-
-        else if (key == "d") {inventory_add(Inventory,Map[px+1][py].type,1);
-            Map[px+1][py] = new Block("air") ;draw();}
-
-        else if (key == "s") {inventory_add(Inventory,Map[px][py+1].type,1);
-            Map[px][py+1] = new Block("air") ;draw();}
-
-        else if (key == "a") {inventory_add(Inventory,Map[px-1][py].type,1);
-            Map[px-1][py] = new Block("air") ;draw();}
+function mine(where) {
+    inventory_add(Inventory,Map[where[0]][where[1]].type,1)
+    Map[where[0]][where[1]] = new Block("air") ;
+    draw();
     }
-    /*
-    for (i=0;i<Inventory.lenght;i++) {
-        if (Inventory[i].)
-    }
-    */
 //---------------------------Build function-------------------------------//
 function build() {
 
@@ -379,26 +378,38 @@ function draw(){
 }
 
 
+const worldOptionsBackground = [
+    {name: "stone", color: 'rgba(32,32,32,1)'},
+    {name: "dirt", color: 'rgba(55,34,3,1)'},
+    {name: "grass", color: 'rgba(4,71,4,1)'}
+];
+
+const worldOptionsForeground = [
+    {name: "wood", color: 'rgba(128,67,48,1)'},
+    {name: "leaves", color: 'rgba(65,176,71,1)'},
+    {name: "stone", color: 'rgba(94,91,91,1)'},
+    {name: "dirt", color: 'rgba(87,55,7,1)'},
+    {name: "grass", color: 'rgba(15,119,15,1)'}
+];
+
+const worldOptionsInventory = [...worldOptionsForeground];
+
 function color(which,x,y) {
     const canvas = document.getElementById('canvas');
                     const ctx = canvas.getContext('2d');
-if (which == "background") {
-    if (Map2[x][y].type == "stone") {ctx.fillStyle = 'rgba(32,32,32,1)';}
-     else if (Map2[x][y].type == "dirt") {ctx.fillStyle = 'rgba(55,34,3,1)';}
-      else if (Map2[x][y].type == "grass") {ctx.fillStyle = 'rgba(4,71,4,1)';}
-} else if (which == "foreground") {
-    if (Map[x][y].type == "wood") {ctx.fillStyle = 'rgba(128,67,48,1)';}
-     else if (Map[x][y].type == "leaves") {ctx.fillStyle = 'rgba(65,176,71,1)';}
-      else if (Map[x][y].type == "stone") {ctx.fillStyle = 'rgba(94,91,91,1)';}
-       else if (Map[x][y].type == "dirt") {ctx.fillStyle = 'rgba(87,55,7,1)';}
-        else if (Map[x][y].type == "grass") {ctx.fillStyle = 'rgba(15,119,15,1)';}
+
+
+
+if (which === "background") {
+    //search worldOptionsBackground for match =>
+
+    ctx.fillStyle = worldOptionsBackground.find(e => Map2[x][y].type === e.name).color;
+} else if (which === "foreground") {
+    ctx.fillStyle = worldOptionsForeground.find(e => Map[x][y].type === e.name).color;
+
 } else {// probably inventory
-    if (Inventory[x].type == "wood") {ctx.fillStyle = 'rgba(128,67,48,1)';}
-     else if (Inventory[x].type == "leaves") {ctx.fillStyle = 'rgba(65,176,71,1)';}
-      else if (Inventory[x].type == "stone") {ctx.fillStyle = 'rgba(94,91,91,1)';}
-       else if (Inventory[x].type == "dirt") {ctx.fillStyle = 'rgba(87,55,7,1)';}
-        else if (Inventory[x].type == "grass") {ctx.fillStyle = 'rgba(15,119,15,1)';}
-    }
+    ctx.fillStyle = worldOptionsInventory.find(e => Inventory[x].type === e.name).color;
+}
 }
 
 
